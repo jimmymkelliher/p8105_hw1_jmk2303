@@ -1,15 +1,16 @@
 ---
 title: "P8105: Data Science I"
-author: "Assignment 1"
-date: "Jimmy Kelliher (UNI: jmk2303)"
-output: github_document
+author: "Assignment 1<br>Jimmy Kelliher (UNI: jmk2303)"
+output:
+  github_document:
+    toc: TRUE
 ---
 
 <!------------------------------------------------------------------------------------------
 Preamble
 ------------------------------------------------------------------------------------------->
 
-```{r}
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
 library(tidyverse)
 ```
 
@@ -17,11 +18,15 @@ library(tidyverse)
 Problem 1
 ------------------------------------------------------------------------------------------->
 
-```{r}
+# Problem 1
+
+We begin by constructing a data frame consisting of a numeric vector, a logical vector, a character vector, and a factor vector, each consisting of ten elements.
+
+```{r, echo = TRUE, message = FALSE, warning = FALSE}
 # set a seed for reproducibility
 set.seed(8105)
 
-# create a dataframe
+# create a data frame
 dataTypes <- tibble(
     numVar = rnorm(10)      # numeric vector of ten iid draws from N(0, 1)
   , logVar = numVar > 0     # logical vector indicating if numvar is positive
@@ -33,13 +38,68 @@ dataTypes <- tibble(
   ))
 )
 
-mean(pull(dataTypes, numVar))
-mean(pull(dataTypes, logVar))
-mean(pull(dataTypes, strVar))
-mean(pull(dataTypes, facVar))
-
+# output data frame
+dataTypes
 ```
+
+Now we will attempt to compute the mean of each column of our data frame. Let's begin with the numeric vector.
+
+```{r, echo = TRUE, message = FALSE, warning = TRUE}
+# attempt to compute mean of numerical vector
+mean(pull(dataTypes, numVar))
+```
+
+We obtain a mean of about `r round(mean(pull(dataTypes, numVar)), 2)`. This result is very straightforward! We will now attempt to compute the mean of our logical vector.
+
+```{r, echo = TRUE, message = FALSE, warning = TRUE}
+# attempt to compute mean of logical vector
+mean(pull(dataTypes, logVar))
+```
+
+That worked, as well! While values in our logical vector are Boolean, R coerces values via the map FALSE $\mapsto$ 0 and TRUE $\mapsto$ 1. When taking the mean of such a vector, then, we are computing the fraction of elements in our vector for which our logical statement evaluates to TRUE. In our case, we recover the fraction of elements in our numeric vector that are positive.
+
+Things are looking up! We will now attempt to compute the mean of our character vector.
+
+```{r, echo = TRUE, message = FALSE, warning = TRUE}
+# attempt to compute mean of character vector
+mean(pull(dataTypes, strVar))
+```
+
+_Oh no!_ Our luck has run out, it seems. While there is a very natural coercion from a Boolean variable to a binary numeric variable, the data in our character vector does not even have a meaningful ordering. As such, R returns a value of NA along with a warning message. We pessimistically proceed with our factor vector.
+
+```{r, echo = TRUE, message = FALSE, warning = TRUE}
+# attempt to compute mean of factor vector
+mean(pull(dataTypes, facVar))
+```
+
+Again, R is unable to coerce the data into anything that might meaningfully allow us to compute a mean. Where did we go wrong? Let's try to coerce each of our non-numeric vectors manually.
+
+```{r, echo = TRUE, message = FALSE, warning = FALSE, results = "hide"}
+# experiment with coercing data types to numeric
+as.numeric(pull(dataTypes, logVar))
+as.numeric(pull(dataTypes, strVar))
+as.numeric(pull(dataTypes, facVar))
+```
+
+As mentioned earlier, coercion of our Boolean vector is straightforward. However, because our character and factor vectors contain non-numeric characters, coercion to a numeric vector is impossible. In these instances, we are given a vector of NAs as pittance. That said, there do exist character and factor vectors for which coercion _is_ possible.
+
+```{r, echo = TRUE, message = FALSE, warning = FALSE}
+# example of character vector that can be coerced to a numeric one
+as.numeric(c("1", "2", "3"))
+```
+
+Because each element in the above character vector is comprised solely of numeric characters, coercion is possible. This is a very useful feature, as many data providers will store numeric data as strings; conversion back to numeric data, when safe to do, can reduce file size substantially.
 
 <!------------------------------------------------------------------------------------------
 Problem 2
 ------------------------------------------------------------------------------------------->
+
+# Problem 2
+
+```{r, echo = TRUE, message = FALSE, warning = FALSE}
+# load in the penguins dataset
+data("penguins", package = "palmerpenguins")
+
+head(penguins)
+summary(penguins)
+```
