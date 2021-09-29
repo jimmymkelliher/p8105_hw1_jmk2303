@@ -112,7 +112,8 @@ The penguins dataset consists of `r nrow(penguins)` rows and `r ncol(penguins)` 
 
 ```{r, echo = TRUE, message = FALSE, warning = FALSE}
 # create a scatter plot of flipper length versus bill length, by species
-flipperBillScatter <- 
+flipperBillScatter <-
+  # instantiate scatter plot
   ggplot(
     data = penguins 
   , aes(
@@ -121,7 +122,7 @@ flipperBillScatter <-
       , color = species           # assign each level of species a color
     )
 ) +
-  # instantiate scatter plot
+  # fill scatter plot
   geom_point() +
   # add metadata
   labs(
