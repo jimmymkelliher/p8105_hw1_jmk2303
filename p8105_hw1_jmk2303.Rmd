@@ -11,6 +11,7 @@ Preamble
 ------------------------------------------------------------------------------------------->
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
+# load necessary packages
 library(tidyverse)
 ```
 
@@ -94,6 +95,8 @@ Problem 2
 
 # Problem 2
 
+We now introduce the penguins dataset, courtesy of Dr. Kristen Gorman and the Palmer Station, Antarctica LTER, a member of the Long Term Ecological Research Network.
+
 ```{r, echo = TRUE, message = FALSE, warning = FALSE}
 # load in the penguins dataset
 data("penguins", package = "palmerpenguins")
@@ -105,7 +108,7 @@ head(penguins)
 summary(penguins)
 ```
 
-The penguins dataset consists of `r nrow(penguins)` rows and `r ncol(penguins)` columns. The column names of the dataset are (`r names(penguins)`), and the data are of types (`r sapply(penguins, class)`), respectively. Upon excluding rows with missing values, the mean flipper length of penguins in the dataset is `r round(mean(pull(penguins, flipper_length_mm), na.rm = TRUE), 2)` millimeters. To visualize the correlation between flipper length and bill length, we construct a scatter plot below.
+The penguins dataset consists of `r nrow(penguins)` rows and `r ncol(penguins)` columns. The column names of the dataset are (`r names(penguins)`), and the data are of types (`r sapply(penguins, class)`), respectively. The data were collected between `r min(pull(penguins, year))` and `r max(pull(penguins, year))` across `r max(as.numeric(pull(penguins, island)))` islands. Upon excluding rows with missing values, the mean flipper length of penguins in the dataset is about `r round(mean(pull(penguins, flipper_length_mm), na.rm = TRUE), 2)` millimeters. To visualize the correlation between flipper length and bill length, we construct a scatter plot below.
 
 ```{r, echo = TRUE, message = FALSE, warning = FALSE}
 # create a scatter plot of flipper length versus bill length, by species
@@ -135,3 +138,5 @@ flipperBillScatter
 # save the scatter plot
 ggsave("flipper_vs_bill_scatter.png", flipperBillScatter, width = 8, height = 5)
 ```
+
+There is a clear positive linear correlation between a penguin's flipper length and bill length. This is intuitive, as both of these physical traits are probably positively correlated with a penguin's height, as well. This linear trend persists across the three species in our dataset, though the trend for Adelie penguins seems to be subject to more variation than that of the other two species. We do have one obvious outlier in our data: a Chinstrap penguin who was blessed with one of the largest bills, but cursed with one of the shortest flippers.
