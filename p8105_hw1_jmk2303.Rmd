@@ -79,7 +79,7 @@ as.numeric(pull(dataTypes, strVar))
 as.numeric(pull(dataTypes, facVar))
 ```
 
-As mentioned earlier, coercion of our Boolean vector is straightforward. Our factor vector can also be coerced according to the map $\text{factor}_k \mapsto k$, where $\text{factor}_k$ denotes the $k$th factor level of our vector. R refuses to implement this coercion in computing means because the order of factors is arbitrary, though this manner of coercion can be useful in linear regression models with fixed effects, for example. However, because elements of our character vector contain non-numeric characters, coercion to a numeric vector is impossible. In this instance, we are given a vector of NAs as pittance. That said, there do exist character for which coercion _is_ possible.
+As mentioned earlier, coercion of our Boolean vector is straightforward. Our factor vector can also be coerced according to the map $\text{factor}_k \mapsto k$, where $\text{factor}_k$ denotes the $k$th factor level of our vector. While R refuses to implement this coercion in computing means because the order of factors is arbitrary, this manner of coercion can be useful in linear regression models with fixed effects, for example. However, because elements of our character vector contain non-numeric characters, coercion to a numeric vector is impossible. In this instance, we are given a vector of NAs as pittance. That said, there do exist character for which coercion _is_ possible.
 
 ```{r, echo = TRUE, message = FALSE, warning = FALSE}
 # example of character vector that can be coerced to a numeric one
@@ -109,7 +109,8 @@ The penguins dataset consists of `r nrow(penguins)` rows and `r ncol(penguins)` 
 
 ```{r, echo = TRUE, message = FALSE, warning = FALSE}
 # create a scatter plot of flipper length versus bill length, by species
-ggplot(
+flipperBillScatter <- 
+  ggplot(
     data = penguins 
   , aes(
         x     = bill_length_mm    # x variable is bill length
@@ -128,6 +129,9 @@ ggplot(
   # center the title of the graph
   theme(plot.title = element_text(hjust = 0.5))
 
+# output the scatter plot
+flipperBillScatter
+
 # save the scatter plot
-ggsave("flipper_vs_bill_scatter.png")
+ggsave("flipper_vs_bill_scatter.png", flipperBillScatter, width = 8, height = 5)
 ```
